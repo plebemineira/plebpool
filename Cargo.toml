@@ -7,4 +7,11 @@ license = "MIT + Apache-2.0"
 repository = "https://github.com/plebemineira/plebpool"
 
 [dependencies]
-pool_sv2 = { git = "https://github.com/stratum-mining/stratum.git", branch = "dev" }
+async-channel = "1.5.1"
+tokio = { version = "1", features = ["full"] }
+tracing = { version = "0.1" }
+toml = { version = "*", git = "https://github.com/diondokter/toml-rs", default-features = false, rev = "c4161aa" }
+tracing-subscriber = "0.3"
+
+# SRI
+pool_sv2 =  { git = "https://github.com/stratum-mining/stratum.git", branch = "dev" }
