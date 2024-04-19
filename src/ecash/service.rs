@@ -43,7 +43,7 @@ async fn handle_paid_invoice(mint: Arc<cdk::mint::Mint>, request: &str) -> anyho
 pub async fn mint_service(
     config_file_arg: String,
 ) -> anyhow::Result<tokio::task::JoinHandle<()>> {
-    let mint_config = match ecash::config::MintConfig::new(&Some(config_file_arg)) {
+    let ecash_config = match ecash::config::EcashConfig::new(&Some(config_file_arg)) {
         Ok(mint_settings) => mint_settings,
         Err(e) => {
             error!("{}. Halting.", e);
@@ -52,9 +52,10 @@ pub async fn mint_service(
     };
 
     // Create db_path parent directory if it doesn't exist
-    guarantee_path(&mint_config.db_path)?;
+    guarantee_path(&ecash_config.mint.db_path)?;
     let localstore = cdk::mint::RedbLocalStore::new(
-        mint_config
+        ecash_config
+            .mint
             .db_path
             .to_str()
             .expect("PathBuf always converts to &str"),
@@ -62,7 +63,7 @@ pub async fn mint_service(
 
     let mint = cdk::mint::Mint::new(
         Arc::new(localstore),
-        bip39::Mnemonic::from_str(&mint_config.mnemonic)?,
+        bip39::Mnemonic::from_str(&ecash_config.mint.mnemonic)?,
         HashSet::new(),
         cdk::amount::Amount::ZERO,
         0.0,
@@ -71,9 +72,9 @@ pub async fn mint_service(
 
     debug!("Mint created");
 
-    guarantee_path(&mint_config.ln.cln_path.clone().unwrap())?; // todo: remove unwrap
+    guarantee_path(&ecash_config.ln.cln_path.clone().unwrap())?; // todo: remove unwrap
     let cln_socket = expand_path(
-        mint_config
+        ecash_config
             .ln
             .cln_path
             .clone()
@@ -83,7 +84,7 @@ pub async fn mint_service(
     )
     .ok_or(anyhow::anyhow!("cln socket not defined"))?;
 
-    let last_pay_path = PathBuf::from_str(&mint_config.last_pay_path.clone())?;
+    let last_pay_path = PathBuf::from_str(&ecash_config.mint.last_pay_path.clone())?;
 
     // Create last_pay_path if it doesn't exist
     match fs::metadata(&last_pay_path) {
@@ -172,9 +173,9 @@ pub async fn mint_service(
         ]))
         .with_state(state);
 
-    let ip = Ipv4Addr::from_str(&mint_config.listen_host)?;
+    let ip = Ipv4Addr::from_str(&ecash_config.mint.listen_host)?;
 
-    let port = mint_config.listen_port;
+    let port = ecash_config.mint.listen_port;
 
     let listen_addr = SocketAddr::new(std::net::IpAddr::V4(ip), port);
     axum::Server::bind(&listen_addr)
