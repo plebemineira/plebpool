@@ -3,6 +3,7 @@ url = "https://example.com/"
 listen_host = "127.0.0.1"
 listen_port = 8085
 mnemonic = "inner strategy nasty verify camp bind avoid cause glue holiday dress bounce exotic husband hungry winter diet town spray team number hen upper seek"
+derivation_path = "0/0/0/0"
 max_order = 32
 db_path = "/tmp/plebpool/mint.redb"
 last_pay_path = "/tmp/plebpool/last_pay.txt"
