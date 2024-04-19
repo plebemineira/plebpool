@@ -19,7 +19,7 @@ async fn main() -> anyhow::Result<()> {
     debug!("Loading configs from: {}", args.config);
 
     // launch mint_service
-    let mint_service_handle = ecash::service::mint_service(args.config);
+    let mint_service_handle = ecash::service::service(args.config);
 
     // await on mint_service
     mint_service_handle.await?;
