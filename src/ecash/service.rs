@@ -19,27 +19,6 @@ struct MintState {
     mint: Arc<tokio::sync::Mutex<cdk::mint::Mint>>,
 }
 
-async fn handle_paid_invoice(mint: Arc<cdk::mint::Mint>, request: &str) -> anyhow::Result<()> {
-    let quotes: Vec<cdk::types::MintQuote> = mint.mint_quotes().await?;
-
-    for quote in quotes {
-        if quote.request.eq(request) {
-            let q = cdk::types::MintQuote {
-                id: quote.id,
-                amount: quote.amount,
-                unit: quote.unit,
-                request: quote.request,
-                paid: true,
-                expiry: quote.expiry,
-            };
-
-            mint.update_mint_quote(q).await?;
-        }
-    }
-
-    Ok(())
-}
-
 pub async fn mint_service(
     config_file_arg: String,
 ) -> anyhow::Result<tokio::task::JoinHandle<()>> {
@@ -52,7 +31,7 @@ pub async fn mint_service(
     };
 
     // Create db_path parent directory if it doesn't exist
-    guarantee_path(&ecash_config.mint.db_path)?;
+    guarantee_parent_path(&ecash_config.mint.db_path)?;
     let localstore = cdk::mint::RedbLocalStore::new(
         ecash_config
             .mint
@@ -72,7 +51,6 @@ pub async fn mint_service(
 
     debug!("Mint created");
 
-    guarantee_path(&ecash_config.ln.cln_path.clone().unwrap())?; // todo: remove unwrap
     let cln_socket = expand_path(
         ecash_config
             .ln
@@ -444,7 +422,7 @@ pub fn unix_time() -> u64 {
         .unwrap_or(0)
 }
 
-fn guarantee_path(path: &PathBuf) -> Result<(), std::io::Error> {
+fn guarantee_parent_path(path: &PathBuf) -> Result<(), std::io::Error> {
     match std::fs::metadata(&path) {
         Ok(_) => Ok(()),
         Err(_e) => {
@@ -452,4 +430,25 @@ fn guarantee_path(path: &PathBuf) -> Result<(), std::io::Error> {
             Ok(())
         }
     }
+}
+
+async fn handle_paid_invoice(mint: Arc<cdk::mint::Mint>, request: &str) -> anyhow::Result<()> {
+    let quotes: Vec<cdk::types::MintQuote> = mint.mint_quotes().await?;
+
+    for quote in quotes {
+        if quote.request.eq(request) {
+            let q = cdk::types::MintQuote {
+                id: quote.id,
+                amount: quote.amount,
+                unit: quote.unit,
+                request: quote.request,
+                paid: true,
+                expiry: quote.expiry,
+            };
+
+            mint.update_mint_quote(q).await?;
+        }
+    }
+
+    Ok(())
 }
