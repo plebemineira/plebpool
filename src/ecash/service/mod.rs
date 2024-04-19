@@ -27,7 +27,7 @@ pub async fn mint_service(
     let ecash_config = match ecash::config::EcashConfig::new(&Some(config_file_arg)) {
         Ok(mint_settings) => mint_settings,
         Err(e) => {
-            error!("{}. Halting.", e);
+            error!("{e:?}. Halting.");
             std::process::exit(1);
         }
     };
