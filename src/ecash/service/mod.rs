@@ -43,11 +43,11 @@ pub async fn mint_service(
     )?;
 
     let mint = cdk::mint::Mint::new(
-        Arc::new(localstore),
-        bip39::Mnemonic::from_str(&ecash_config.mint.mnemonic)?,
-        HashSet::new(),
-        cdk::amount::Amount::ZERO,
-        0.0,
+        Arc::new(localstore),                                       // localstore
+        bip39::Mnemonic::from_str(&ecash_config.mint.mnemonic)?,    // mnemonic
+        HashSet::new(),                                             // keysets_info
+        cdk::amount::Amount::ZERO,                                  // min_fee_reserve
+        0.0,                                                        // percent_fee_reserve
     )
     .await?;
 
