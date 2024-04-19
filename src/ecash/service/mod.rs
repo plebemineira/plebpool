@@ -1,5 +1,6 @@
 use crate::ecash;
 
+use anyhow::Context;
 use std::collections::HashSet;
 use std::convert::TryInto;
 use std::fs;
@@ -58,9 +59,9 @@ pub async fn mint_service(
             .ln
             .cln_path
             .clone()
-            .ok_or(anyhow::anyhow!("cln socket not defined"))?
+            .context("cln socket not defined")?
             .to_str()
-            .ok_or(anyhow::anyhow!("cln socket not defined"))?,
+            .context("cln socket not defined")?,
     )
     .ok_or(anyhow::anyhow!("cln socket not defined"))?;
 
