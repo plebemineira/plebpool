@@ -1,0 +1,14 @@
+url = "https://example.com/"
+listen_host = "127.0.0.1"
+listen_port = 8085
+mnemonic = "inner strategy nasty verify camp bind avoid cause glue holiday dress bounce exotic husband hungry winter diet town spray team number hen upper seek"
+max_order = 32
+db_path = "/tmp/plebpool/mint.redb"
+last_pay_path = "/tmp/plebpool/last_pay.txt"
+min_fee_reserve = 10
+min_fee_percent = 1.0
+
+[ln]
+cln_path = "/tmp/plebpool/lighting/ln_1/regtest/lightning-rpc"
+fee_percent = 1.0
+reserve_fee_min = 1000

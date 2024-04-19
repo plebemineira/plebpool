@@ -1,8 +1,28 @@
-pub use pool_sv2::lib::*;
-pub use jd_server::lib::*;
+use crate::cli::CLIArgs;
 
-fn main() {
-    println!("⛏️ plebs be hashin ⚡");
-    // opinionated share accounting logic using pool_sv2::lib
-    // opinionated coinbase generation logic using jd_server::lib
+use clap::Parser;
+use tracing::{debug, info};
+
+mod cli;
+mod ecash;
+
+#[tokio::main]
+async fn main() -> anyhow::Result<()> {
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .init();
+
+    info!("⛏️ plebs be hashin ⚡");
+
+    let args = CLIArgs::parse();
+
+    debug!("Loading configs from: {}", args.config);
+
+    // launch mint_service
+    let mint_service_handle = ecash::service::mint_service(args.config);
+
+    // await on mint_service
+    mint_service_handle.await?;
+
+    Ok(())
 }
