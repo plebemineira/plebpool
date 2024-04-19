@@ -71,7 +71,12 @@ pub async fn mint_service(
         Ok(_) => (),
         Err(_e) => {
             // Create the parent directory if it doesn't exist
-            fs::create_dir_all(last_pay_path.parent().unwrap())?;
+            if let Some(parent_path) = last_pay_path.parent() {
+                fs::create_dir_all(parent_path)?;
+            } else {
+                return Err(anyhow::anyhow!("Parent directory not found"));
+            }
+
 
             // Attempt to create the file
             let mut fs = File::create(&last_pay_path).unwrap();
