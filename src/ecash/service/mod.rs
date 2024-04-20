@@ -22,9 +22,7 @@ struct MintState {
     mint: Arc<tokio::sync::Mutex<cdk::mint::Mint>>,
 }
 
-pub async fn mint_service(
-    config_file_arg: String,
-) -> anyhow::Result<tokio::task::JoinHandle<()>> {
+pub async fn mint_service(config_file_arg: String) -> anyhow::Result<tokio::task::JoinHandle<()>> {
     let ecash_config = match ecash::config::EcashConfig::new(&Some(config_file_arg)) {
         Ok(mint_settings) => mint_settings,
         Err(e) => {
@@ -44,11 +42,11 @@ pub async fn mint_service(
     )?;
 
     let mint = cdk::mint::Mint::new(
-        Arc::new(localstore),                                       // localstore
-        bip39::Mnemonic::from_str(&ecash_config.mint.mnemonic)?,    // mnemonic
-        HashSet::new(),                                             // keysets_info
-        cdk::amount::Amount::ZERO,                                  // min_fee_reserve
-        0.0,                                                        // percent_fee_reserve
+        Arc::new(localstore),                                    // localstore
+        bip39::Mnemonic::from_str(&ecash_config.mint.mnemonic)?, // mnemonic
+        HashSet::new(),                                          // keysets_info
+        cdk::amount::Amount::ZERO,                               // min_fee_reserve
+        0.0,                                                     // percent_fee_reserve
     )
     .await?;
 
@@ -77,7 +75,6 @@ pub async fn mint_service(
             } else {
                 return Err(anyhow::anyhow!("Parent directory not found"));
             }
-
 
             // Attempt to create the file
             let mut fs = File::create(&last_pay_path).unwrap();
@@ -138,7 +135,10 @@ pub async fn mint_service(
             "/v1/mint/quote/bolt11/:quote_id",
             axum::routing::get(handlers::get_check_mint_bolt11_quote),
         )
-        .route("/v1/mint/bolt11", axum::routing::post(handlers::post_mint_bolt11))
+        .route(
+            "/v1/mint/bolt11",
+            axum::routing::post(handlers::post_mint_bolt11),
+        )
         .route(
             "/v1/melt/quote/bolt11",
             axum::routing::post(handlers::get_melt_bolt11_quote),
@@ -147,16 +147,21 @@ pub async fn mint_service(
             "/v1/melt/quote/bolt11/:quote_id",
             axum::routing::get(handlers::get_check_melt_bolt11_quote),
         )
-        .route("/v1/melt/bolt11", axum::routing::post(handlers::post_melt_bolt11))
+        .route(
+            "/v1/melt/bolt11",
+            axum::routing::post(handlers::post_melt_bolt11),
+        )
         .route("/v1/checkstate", axum::routing::post(handlers::post_check))
         .route("/v1/info", axum::routing::get(handlers::get_mint_info))
         .route("/v1/restore", axum::routing::post(handlers::post_restore))
-        .layer(tower_http::cors::CorsLayer::very_permissive().allow_headers([
-            axum::http::header::AUTHORIZATION,
-            axum::http::header::CONTENT_TYPE,
-            axum::http::header::ACCESS_CONTROL_ALLOW_CREDENTIALS,
-            axum::http::header::ACCESS_CONTROL_ALLOW_ORIGIN,
-        ]))
+        .layer(
+            tower_http::cors::CorsLayer::very_permissive().allow_headers([
+                axum::http::header::AUTHORIZATION,
+                axum::http::header::CONTENT_TYPE,
+                axum::http::header::ACCESS_CONTROL_ALLOW_CREDENTIALS,
+                axum::http::header::ACCESS_CONTROL_ALLOW_ORIGIN,
+            ]),
+        )
         .with_state(state);
 
     let ip = Ipv4Addr::from_str(&ecash_config.mint.listen_host)?;

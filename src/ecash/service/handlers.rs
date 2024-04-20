@@ -171,7 +171,10 @@ pub async fn post_melt_bolt11(
     let pre = state
         .ln
         .ln_processor
-        .pay_invoice(ln_rs::Bolt11Invoice::from_str(&quote.request).unwrap(), None)
+        .pay_invoice(
+            ln_rs::Bolt11Invoice::from_str(&quote.request).unwrap(),
+            None,
+        )
         .await
         .unwrap();
 

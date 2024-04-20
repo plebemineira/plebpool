@@ -46,7 +46,9 @@ impl From<url::ParseError> for EcashError {
 impl IntoResponse for EcashError {
     fn into_response(self) -> Response {
         match self {
-            EcashError::DecodeInvoice => (StatusCode::BAD_REQUEST, self.to_string()).into_response(),
+            EcashError::DecodeInvoice => {
+                (StatusCode::BAD_REQUEST, self.to_string()).into_response()
+            }
             EcashError::StatusCode(code) => (code, "").into_response(),
             EcashError::_Ln(code) => {
                 (StatusCode::INTERNAL_SERVER_ERROR, code.to_string()).into_response()

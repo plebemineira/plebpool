@@ -1,3 +1,7 @@
+[pool]
+downstream_listen_host = "127.0.0.1"
+downstream_listen_port = 34254
+
 [mint]
 url = "https://example.com/"
 listen_host = "127.0.0.1"

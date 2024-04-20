@@ -46,7 +46,7 @@ impl Default for MintConfig {
     }
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct EcashConfig {
     pub mint: MintConfig,
     pub ln: LnConfig,

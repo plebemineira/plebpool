@@ -8,6 +8,7 @@ repository = "https://github.com/plebemineira/plebpool"
 
 [dependencies]
 async-trait = "0.1.77"
+async-channel = "1.5.1"
 axum = "0.6.18"
 axum-macros = "0.3.7"
 cln-rpc = "0.1.3"
@@ -37,3 +38,7 @@ nostr = { version = "0.22.0", default-features = false }
 # ln-rs = { path = "../ln-rs/crates/ln-rs" }
 ln-rs = { git = "https://github.com/thesimplekid/ln-rs", rev = "629bfe4e", default-features = false, features = ["cln"] }
 url = "2.4.0"
+
+codec_sv2 = { version = "^1.0.1", features = ["noise_sv2"] }
+network_helpers_sv2 = { version = "1.0.0", features =["with_tokio","with_buffer_pool"] }
+roles_logic_sv2 = { version = "^1.0.0" }
