@@ -1,8 +1,20 @@
 # plebpool
 
-⛏️ plebs be hashin ⚡
+<h1 align="center">
+  <br>
+  <img width="100" src="dwarf.png">
+  <br>
+plebpool
+<br>
+</h1>
 
-plebpool is a pool for the plebs
+<p align="center">
+⛏️ plebs be hashin ⚡
+</p>
+
+# intro
+
+`plebpool` is a pleb-friendly Bitcoin mining pool leveraging:
 - Lightning integration via [LDK](https://lightningdevkit.org/)
 - StratumV2 integration via [SRI](https://stratumprotocol.org/)
 
@@ -18,15 +30,3 @@ assuming you cloned the repo, you can start `plebpool` via:
 $ cargo build --release
 $ target/release/plebpool
 ```
-
-# nix develop
-
-a [nix flake]() is provided with the following development setup:
-- one `bitcoind` on `regtest` mode
-- two `lightningd`
-
-assuming you cloned the repo, and that nix flakes are enabled on your system, you can launch this development setup via:
-```
-$ nix develop
-```
-
