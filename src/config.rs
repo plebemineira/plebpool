@@ -1,11 +1,10 @@
 use serde::{Deserialize, Serialize};
-use crate::{ecash, pool};
+use crate::{ln, pool};
 
 #[derive(Debug, Clone, Serialize, Deserialize, Default)]
 pub struct PlebPoolConfig {
     pub pool: pool::config::PoolConfig,
-    pub mint: ecash::config::MintConfig,
-    pub ln: ecash::config::LnConfig,
+    pub ln: ln::config::LnConfig,
 }
 
 impl PlebPoolConfig {

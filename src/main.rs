@@ -4,7 +4,7 @@ use clap::Parser;
 use tracing::{debug, info};
 
 mod cli;
-mod ecash;
+mod ln;
 mod pool;
 mod config;
 
@@ -22,14 +22,17 @@ async fn main() -> anyhow::Result<()> {
 
     let plebpool_config = config::PlebPoolConfig::new(args.config.clone())?;
 
-    // launch mint_service
-    let mint_service_handle = ecash::service::mint_service(args.config.clone());
+    let _ln_service = ln::service::LnService::new(plebpool_config.ln)?;
 
     let pool_service = pool::service::PoolService::new(plebpool_config.pool).await?;
     let pool_service_handle = pool_service.serve();
 
-    mint_service_handle.await?;
     pool_service_handle.await?;
 
+    // let the services do their jobs asynchronously,
+    // while keeping the main thread alive
+    loop { tokio::task::yield_now().await; }
+
+    #[allow(unreachable_code)]
     Ok(())
 }
