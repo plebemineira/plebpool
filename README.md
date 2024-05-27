@@ -30,3 +30,20 @@ assuming you cloned the repo, you can start `plebpool` via:
 $ cargo build --release
 $ target/release/plebpool
 ```
+
+# roadmap
+
+## Pool
+- [ ] Channel Difficulty Management
+- [ ] Channel Factory
+- [ ] JDS
+- [ ] Share Accounting
+- [ ] ?
+
+## LN
+- [ ] BOLT12
+- [ ] ?
+
+## Pool + LN
+- [ ] Coinbase Management
+- [ ] ?
