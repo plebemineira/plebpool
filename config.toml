@@ -6,4 +6,4 @@ downstream_listen_port = 34254
 network = "testnet"
 esplora_server_url = "https://blockstream.info/testnet/api"
 gossip_source_rgs = "https://rapidsync.lightningdevkit.org/testnet/snapshot"
-log_level = "warn"
+log_level = "info"

@@ -28,12 +28,42 @@ impl LnService {
         // set log level
         if let Some(log_level) = ln_config.log_level {
             match log_level.as_str() {
-                "gossip" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Gossip),
-                "trace" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Trace),
-                "debug" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Debug),
-                "info" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Info),
-                "warn" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Warn),
-                "error" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Error),
+                "gossip" => {
+                    tracing_subscriber::fmt()
+                        .with_max_level(tracing::Level::INFO)
+                        .init();
+                    ldk_node_builder.set_log_level(ldk_node::LogLevel::Gossip)
+                },
+                "trace" => {
+                    tracing_subscriber::fmt()
+                        .with_max_level(tracing::Level::TRACE)
+                        .init();
+                    ldk_node_builder.set_log_level(ldk_node::LogLevel::Trace)
+                },
+                "debug" => {
+                    tracing_subscriber::fmt()
+                        .with_max_level(tracing::Level::DEBUG)
+                        .init();
+                    ldk_node_builder.set_log_level(ldk_node::LogLevel::Debug)
+                },
+                "info" => {
+                    tracing_subscriber::fmt()
+                        .with_max_level(tracing::Level::INFO)
+                        .init();
+                    ldk_node_builder.set_log_level(ldk_node::LogLevel::Info)
+                },
+                "warn" => {
+                    tracing_subscriber::fmt()
+                        .with_max_level(tracing::Level::ERROR)
+                        .init();
+                    ldk_node_builder.set_log_level(ldk_node::LogLevel::Warn)
+                },
+                "error" => {
+                    tracing_subscriber::fmt()
+                        .with_max_level(tracing::Level::ERROR)
+                        .init();
+                    ldk_node_builder.set_log_level(ldk_node::LogLevel::Error)
+                },
                 _ => return Err(anyhow::anyhow!("Impossible value on ln.log_level config")),
             };
         }
