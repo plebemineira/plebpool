@@ -12,30 +12,41 @@ impl LnService {
         let mut ldk_node_builder = ldk_node::Builder::new();
 
         // set network
-        match ln_config.network.as_str() {
-            "testnet" => ldk_node_builder.set_network(ldk_node::Network::Testnet),
-            "regtest" => ldk_node_builder.set_network(ldk_node::Network::Regtest),
-            "mainnet" => ldk_node_builder.set_network(ldk_node::Network::Bitcoin),
-            "signet" => ldk_node_builder.set_network(ldk_node::Network::Signet),
-            _ => return Err(anyhow::anyhow!("Impossible value on ln.network config")),
-        };
+        if let Some(network) = ln_config.network {
+            match network.as_str() {
+                "testnet" => ldk_node_builder.set_network(ldk_node::Network::Testnet),
+                "regtest" => ldk_node_builder.set_network(ldk_node::Network::Regtest),
+                "mainnet" => ldk_node_builder.set_network(ldk_node::Network::Bitcoin),
+                "signet" => ldk_node_builder.set_network(ldk_node::Network::Signet),
+                _ => return Err(anyhow::anyhow!("Impossible value on ln.network config")),
+            };
+        } else {
+            // mainnet if no network is specified
+            ldk_node_builder.set_network(ldk_node::Network::Bitcoin);
+        }
 
         // set log level
-        match ln_config.log_level.as_str() {
-            "gossip" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Gossip),
-            "trace" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Trace),
-            "debug" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Debug),
-            "info" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Info),
-            "warn" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Warn),
-            "error" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Error),
-            _ => return Err(anyhow::anyhow!("Impossible value on ln.log_level config")),
-        };
+        if let Some(log_level) = ln_config.log_level {
+            match log_level.as_str() {
+                "gossip" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Gossip),
+                "trace" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Trace),
+                "debug" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Debug),
+                "info" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Info),
+                "warn" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Warn),
+                "error" => ldk_node_builder.set_log_level(ldk_node::LogLevel::Error),
+                _ => return Err(anyhow::anyhow!("Impossible value on ln.log_level config")),
+            };
+        }
 
         // set esplora server
-        ldk_node_builder.set_esplora_server(ln_config.esplora_server_url);
+        if let Some(esplora_server_url) = ln_config.esplora_server_url {
+            ldk_node_builder.set_esplora_server(esplora_server_url);
+        }
 
         // set gossip source (RapidGossipSync)
-        ldk_node_builder.set_gossip_source_rgs(ln_config.gossip_source_rgs);
+        if let Some(gossip_source_rgs) = ln_config.gossip_source_rgs {
+            ldk_node_builder.set_gossip_source_rgs(gossip_source_rgs);
+        }
 
         // build ldk_node
         let ldk_node = ldk_node_builder.build()?;

@@ -3,7 +3,7 @@ downstream_listen_host = "127.0.0.1"
 downstream_listen_port = 34254
 
 [ln]
+network = "testnet"
 esplora_server_url = "https://blockstream.info/testnet/api"
 gossip_source_rgs = "https://rapidsync.lightningdevkit.org/testnet/snapshot"
-network = "regtest"
 log_level = "warn"
