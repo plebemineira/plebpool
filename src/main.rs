@@ -4,9 +4,9 @@ use clap::Parser;
 use tracing::{debug, info};
 
 mod cli;
+mod config;
 mod ln;
 mod pool;
-mod config;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -33,7 +33,9 @@ async fn main() -> anyhow::Result<()> {
 
     // let the services do their jobs asynchronously,
     // while keeping the main thread alive
-    loop { tokio::task::yield_now().await; }
+    loop {
+        tokio::task::yield_now().await;
+    }
 
     #[allow(unreachable_code)]
     Ok(())

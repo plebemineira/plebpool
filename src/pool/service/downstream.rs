@@ -6,11 +6,7 @@ pub struct DownstreamService {
 
 impl DownstreamService {
     pub async fn new(listen_host: String, listen_port: u16) -> anyhow::Result<Self> {
-        let listener = tokio::net::TcpListener::bind((
-            listen_host.as_str(),
-            listen_port,
-        ))
-        .await?;
+        let listener = tokio::net::TcpListener::bind((listen_host.as_str(), listen_port)).await?;
 
         info!(
             "SV2: listening for Downstream connections at: {}:{}",
