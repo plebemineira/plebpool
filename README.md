@@ -34,16 +34,19 @@ $ target/release/plebpool
 # roadmap
 
 ## Pool
-- [ ] Channel Difficulty Management
-- [ ] Channel Factory
-- [ ] JDS
+- [ ] Mining Channel Manager
+- [ ] Mining Channel Difficulty Manager
+- [ ] Job Declaration Channel Manager
+- [ ] Job Declaration Protocol
 - [ ] Share Accounting
 - [ ] ?
 
 ## LN
-- [ ] BOLT12
+- [ ] Peer Manager
+- [ ] Lightning Channel Manager
 - [ ] ?
 
 ## Pool + LN
-- [ ] Coinbase Management
+- [ ] Coinbase Manager
+- [ ] BOLT12 Payout Manager
 - [ ] ?
