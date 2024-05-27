@@ -22,12 +22,14 @@ async fn main() -> anyhow::Result<()> {
 
     let plebpool_config = config::PlebPoolConfig::new(args.config.clone())?;
 
-    let _ln_service = ln::service::LnService::new(plebpool_config.ln)?;
+    let ln_service = ln::service::LnService::new(plebpool_config.ln)?;
+    let ln_service_handle = ln_service.serve();
 
     let pool_service = pool::service::PoolService::new(plebpool_config.pool).await?;
     let pool_service_handle = pool_service.serve();
 
     pool_service_handle.await?;
+    ln_service_handle.await?;
 
     // let the services do their jobs asynchronously,
     // while keeping the main thread alive
