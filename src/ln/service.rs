@@ -1,3 +1,4 @@
+use tracing::info;
 use crate::ln::config::LnConfig;
 
 pub struct LnService {
@@ -39,11 +40,19 @@ impl LnService {
     // build ldk_node
     let ldk_node = ldk_node_builder.build()?;
 
-    // start ldk_node
-    ldk_node.start()?;
-
     Ok(Self {
       ldk_node
     })
   }
+
+    pub async fn serve(self) -> anyhow::Result<tokio::task::JoinHandle<anyhow::Result<()>>> {
+        info!("LDK: starting LN service");
+
+        let handle = tokio::task::spawn(async move {
+            self.ldk_node.start()?;
+            Ok(())
+        });
+
+        Ok(handle)
+    }
 }
