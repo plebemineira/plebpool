@@ -63,8 +63,6 @@ $ cargo run
  - Defines convenient aliases for Bitcoin and Lightning CLI commands: `btc`, `ln1`, `ln2`
  - Ensures the Bitcoin daemon (`bitcoind`) is running and initializes a test wallet.
  - Starts two Lightning Network nodes (`ln1` and `ln2`) if they are not already active, facilitating a ready-to-use development environment.
-   - `ln1 node_id`: `03999f2c3791db6281774c961b103636de6990a5216592c5ea1712e085f5715eee`
-   - `ln2 node_id`: `03a958e3603d17cff820d1b78eb694bec0f43bed062bbba5a416614e413a5b6bfb`
    - `ln1 address`: `127.0.0.1:19846`
    - `ln2 address`: `127.0.0.1:15352`
 
@@ -80,8 +78,9 @@ You can interact with the nodes via:
 ```
 $ ln1 getinfo
 $ ln2 getinfo
-$ btc getblockchaininfo
 ```
+
+And write the `node_id` fields into `config.toml`
 
 # SV2 development
 
