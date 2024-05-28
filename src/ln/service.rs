@@ -1,5 +1,6 @@
 use crate::ln::config::LnConfig;
-use tracing::info;
+use std::str::FromStr;
+use tracing::{error, info};
 
 pub struct LnService {
     #[allow(dead_code)]
@@ -25,7 +26,6 @@ impl LnService {
             ldk_node_builder.set_network(ldk_node::Network::Bitcoin);
         }
 
-
         // set esplora server
         if let Some(esplora_server_url) = ln_config.esplora_server_url {
             ldk_node_builder.set_esplora_server(esplora_server_url);
@@ -39,6 +39,26 @@ impl LnService {
         // build ldk_node
         let ldk_node = ldk_node_builder.build()?;
 
+        if let Some(peers) = ln_config.peers {
+            for peer in peers {
+                let node_id: bitcoin::secp256k1::PublicKey =
+                    bitcoin::secp256k1::PublicKey::from_str(peer.node_id.as_str())?;
+                let address: ldk_node::lightning::ln::msgs::SocketAddress =
+                    ldk_node::lightning::ln::msgs::SocketAddress::from_str(peer.address.as_str())
+                        .expect("failed to parse LN peer addressc");
+
+                match ldk_node.connect(node_id, address, true) {
+                    Ok(_) => info!(
+                        "LDK: connecting to peer: {}, id: {}",
+                        peer.address, peer.node_id
+                    ),
+                    Err(e) => error!(
+                        "LDK: failed to connect to peer: {}, id: {}, error: {}",
+                        peer.address, peer.node_id, e
+                    ),
+                }
+            }
+        }
         Ok(Self { ldk_node })
     }
 
