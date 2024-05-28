@@ -1,0 +1,3 @@
+[submodule "stratum"]
+	path = stratum
+	url = https://github.com/stratum-mining/stratum
