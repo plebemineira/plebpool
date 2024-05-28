@@ -50,3 +50,7 @@ $ target/release/plebpool
 - [ ] Coinbase Manager
 - [ ] BOLT12 Payout Manager
 - [ ] ?
+
+# development
+
+`stratum-message-generator.sh` is used to automate MG tests.
