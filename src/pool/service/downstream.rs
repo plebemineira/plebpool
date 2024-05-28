@@ -19,7 +19,7 @@ impl DownstreamService {
     pub async fn serve(self) -> anyhow::Result<tokio::task::JoinHandle<anyhow::Result<()>>> {
         let handle = tokio::task::spawn(async move {
             while let Ok((stream, addr)) = self.listener.accept().await {
-                info!("SV2: listening for Downstream connections at: {}", addr);
+                info!("SV2: connected with Downstream at: {}", addr);
                 let (_receiver, _sender): (
                     async_channel::Receiver<
                         codec_sv2::StandardEitherFrame<
