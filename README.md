@@ -51,6 +51,30 @@ $ target/release/plebpool
 - [ ] BOLT12 Payout Manager
 - [ ] ?
 
-# development
+# LN development
 
-`stratum-message-generator.sh` is used to automate MG tests.
+`plebpool` uses a Nix flake to streamline the setup of the LN development environment. The `flake.nix` file provides all necessary configurations and dependencies. Here’s an overview of what it does:
+
+1. Dependencies: The flake pulls in dependencies from `NixOS/nixpkgs`, `rustshop/flakebox`, and `numtide/flake-utils`.
+2. Development Shell: It sets up a development shell using `flakebox` utilities, including essential tools like `clightning` and `bitcoind`. 
+3. Environment Configuration (`shellHook`):
+ - Creates required directories for the project and Bitcoin/Lightning setups.
+ - Defines convenient aliases for Bitcoin and Lightning CLI commands: `btc`, `ln1`, `ln2`
+ - Ensures the Bitcoin daemon (`bitcoind`) is running and initializes a test wallet.
+ - Starts two Lightning Network nodes (`ln1` and `ln2`) if they are not already active, facilitating a ready-to-use development environment.
+   - `ln1 node_id`: `03999f2c3791db6281774c961b103636de6990a5216592c5ea1712e085f5715eee`
+   - `ln2 node_id`: `03a958e3603d17cff820d1b78eb694bec0f43bed062bbba5a416614e413a5b6bfb`
+   - `ln1 address`: `127.0.0.1:19846`
+   - `ln2 address`: `127.0.0.1:15352`
+
+
+To use this flake, simply run:
+```
+$ nix develop
+```
+
+This will launch the development shell with all the configurations and tools set up as described.
+
+# SV2 development
+
+`stratum-message-generator.sh` is used to automate [SRI Message Generator](https://github.com/stratum-mining/stratum/tree/main/utils/message-generator) tests.
