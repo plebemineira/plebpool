@@ -27,8 +27,7 @@ there is a sample `config.toml` on the root of the repository, which the `plebpo
 assuming you cloned the repo, you can start `plebpool` via:
 
 ```
-$ cargo build --release
-$ target/release/plebpool
+$ cargo run
 ```
 
 # roadmap
