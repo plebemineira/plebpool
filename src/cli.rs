@@ -1,5 +1,5 @@
 #[derive(clap::Parser)]
-#[command(about = "A pleb-friendly ecash-based Bitcoin mining pool.", author = env!("CARGO_PKG_AUTHORS"), version = env!("CARGO_PKG_VERSION"))]
+#[command(about = "A pleb-friendly Bitcoin mining pool.", author = env!("CARGO_PKG_AUTHORS"), version = env!("CARGO_PKG_VERSION"))]
 pub struct CLIArgs {
     #[arg(
         short,
