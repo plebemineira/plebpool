@@ -52,7 +52,7 @@ impl LnService {
 
                 match ldk_node.connect(node_id, address, true) {
                     Ok(_) => info!(
-                        "LDK: connecting to peer: {}, id: {}",
+                        "LDK: connected to peer: {}, id: {}",
                         peer.address, peer.node_id
                     ),
                     Err(e) => error!(
