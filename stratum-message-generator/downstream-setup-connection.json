@@ -1,0 +1,81 @@
+{
+    "version": "2",
+    "doc": [
+        "Send SetupConnection and assert SetupConnectionSuccess"
+    ],
+    "common_messages": [
+        {
+            "message": {
+                "type": "SetupConnection",
+                "protocol": 0,
+                "min_version": 2,
+                "max_version": 2,
+                "flags": 0,
+                "endpoint_host": "",
+                "endpoint_port": 0,
+                "vendor": "",
+                "hardware_version": "",
+                "firmware": "",
+                "device_id": ""
+            },
+            "id": "setup_connection"
+        }
+    ],
+    "frame_builders": [
+        {
+            "type": "automatic",
+            "message_id": "setup_connection"
+        }
+    ],
+    "actions": [
+        {
+            "message_ids": ["setup_connection"],
+            "role": "client",
+            "results": [
+                {
+                    "type": "match_message_type",
+                    "value": "0x01"
+                }
+            ],
+            "actiondoc":  "This action sends a SetupConnection and checks that receives a message type 0x01, that is SetupConnectionSuccess"
+        }
+    ],
+    "setup_commands": [
+        {
+             "command": "cargo",
+             "args": [
+                        "run"
+             ],
+             "conditions": {
+                 "WithConditions": {
+                     "conditions": [
+                         {
+                             "output_string": "Listening for encrypted connection on: 127.0.0.1:34254",
+                             "output_location": "StdOut",
+                             "late_condition": false,
+                             "condition": true
+                         }
+                     ],
+                     "timer_secs": 320,
+                     "warn_no_panic": false
+                 }
+             }
+         }
+    ],
+    "execution_commands": [
+    ],
+    "cleanup_commands": [
+        {
+            "command": "pkill",
+            "args":  ["-f", "plebpool", "-SIGINT"],
+            "late_condition": false,
+            "conditions": "None"
+        }
+    ],
+    "role": "client",
+    "downstream": {
+        "ip": "127.0.0.1",
+        "port": 34254,
+        "pub_key": "9auqWEzQDVyd2oe1JVGFLMLHZtCo2FFqZwtKA5gd9xbuEu7PH72"
+    }
+}
