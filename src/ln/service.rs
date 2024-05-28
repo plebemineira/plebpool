@@ -39,6 +39,9 @@ impl LnService {
         // build ldk_node
         let ldk_node = ldk_node_builder.build()?;
 
+        // start ldk_node
+        ldk_node.start()?;
+
         if let Some(peers) = ln_config.peers {
             for peer in peers {
                 let node_id: bitcoin::secp256k1::PublicKey =
@@ -59,6 +62,7 @@ impl LnService {
                 }
             }
         }
+
         Ok(Self { ldk_node })
     }
 
