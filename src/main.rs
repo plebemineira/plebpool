@@ -26,7 +26,7 @@ async fn main() -> anyhow::Result<()> {
     let pool_service_handle = pool_service.serve();
 
     pool_service_handle.await?;
-    ln_service_handle.await?;
+    // ln_service_handle.await?;
 
     // let the services do their jobs asynchronously,
     // while keeping the main thread alive
