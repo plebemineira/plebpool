@@ -34,6 +34,8 @@ $ target/release/plebpool
 # roadmap
 
 ## Pool
+- [ ] SV1 Translator Endpoint
+- [ ] SV2 Endpoint
 - [ ] Mining Channel Manager
 - [ ] Mining Channel Difficulty Manager
 - [ ] Job Declaration Channel Manager
@@ -74,6 +76,13 @@ $ nix develop
 ```
 
 This will launch the development shell with all the configurations and tools set up as described.
+
+You can interact with the nodes via:
+```
+$ ln1 getinfo
+$ ln2 getinfo
+$ btc getblockchaininfo
+```
 
 # SV2 development
 
