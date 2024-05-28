@@ -1,3 +1,3 @@
 [submodule "stratum"]
 	path = stratum
-	url = https://github.com/stratum-mining/stratum
+	url = https://github.com/plebhash/stratum-message-generator
