@@ -45,7 +45,7 @@ impl LnService {
                     bitcoin::secp256k1::PublicKey::from_str(peer.node_id.as_str())?;
                 let address: ldk_node::lightning::ln::msgs::SocketAddress =
                     ldk_node::lightning::ln::msgs::SocketAddress::from_str(peer.address.as_str())
-                        .expect("failed to parse LN peer addressc");
+                        .expect("failed to parse LN peer address");
 
                 match ldk_node.connect(node_id, address, true) {
                     Ok(_) => info!(
