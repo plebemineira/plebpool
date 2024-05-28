@@ -4,6 +4,5 @@ use serde::{Deserialize, Serialize};
 pub struct LnConfig {
     pub esplora_server_url: Option<String>,
     pub gossip_source_rgs: Option<String>,
-    pub log_level: Option<String>,
     pub network: Option<String>,
 }
