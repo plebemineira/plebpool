@@ -1,10 +1,10 @@
 use tracing::info;
 
-pub struct DownstreamService {
+pub struct Sv1MiningChannelService {
     listener: tokio::net::TcpListener,
 }
 
-impl DownstreamService {
+impl Sv1MiningChannelService {
     pub async fn new(listen_host: String, listen_port: u16) -> anyhow::Result<Self> {
         let listener = tokio::net::TcpListener::bind((listen_host.as_str(), listen_port)).await?;
 

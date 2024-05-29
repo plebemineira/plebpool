@@ -1,6 +1,6 @@
 [pool]
-downstream_listen_host = "127.0.0.1"
-downstream_listen_port = 34254
+sv1_mining_channel_host = "127.0.0.1"
+sv1_mining_channel_port = 34254
 
 [ln]
 network = "regtest"

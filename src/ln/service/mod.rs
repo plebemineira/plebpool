@@ -1,3 +1,6 @@
+mod channel_manager;
+mod payment;
+
 use crate::ln::config::LnConfig;
 use std::str::FromStr;
 use tracing::{error, info};
