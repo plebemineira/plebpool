@@ -1,44 +1,72 @@
-use tracing::info;
+use std::{
+    future::Future,
+    pin::Pin,
+    task::Poll,
+};
+use tracing::{info, debug};
 
 pub struct Sv1MiningChannelService {
-    listener: tokio::net::TcpListener,
+    tcp_listener: tokio::net::TcpListener,
 }
 
 impl Sv1MiningChannelService {
     pub async fn new(listen_host: String, listen_port: u16) -> anyhow::Result<Self> {
-        let listener = tokio::net::TcpListener::bind((listen_host.as_str(), listen_port)).await?;
+        let tcp_listener = tokio::net::TcpListener::bind((listen_host.as_str(), listen_port)).await?;
 
-        info!(
-            "SV2: listening for Downstream connections at: {}:{}",
-            listen_host, listen_port
-        );
+        Ok(Self { tcp_listener })
+    }
+}
 
-        Ok(Self { listener })
+impl<R> tower::Service<R> for Sv1MiningChannelService
+where
+    R: tokio::io::AsyncWrite + Unpin + Send + 'static,
+{
+    type Response = ();
+    type Error = ();
+    type Future =
+        Pin<Box<dyn Future<Output = Result<Self::Response, Self::Error>> + Send + 'static>>;
+
+    fn poll_ready(&mut self, cx: &mut std::task::Context<'_>) -> Poll<Result<(), Self::Error>> {
+        // self.inner.poll_ready(cx)
+        Poll::Ready(Ok(()))
     }
 
-    pub async fn serve(self) -> anyhow::Result<tokio::task::JoinHandle<anyhow::Result<()>>> {
-        let handle = tokio::task::spawn(async move {
-            while let Ok((stream, addr)) = self.listener.accept().await {
-                info!("SV2: connected with Downstream at: {}", addr);
-                let (_receiver, _sender): (
-                    async_channel::Receiver<
-                        codec_sv2::StandardEitherFrame<
-                            roles_logic_sv2::parsers::PoolMessages<'static>,
-                        >,
-                    >,
-                    async_channel::Sender<
-                        codec_sv2::StandardEitherFrame<
-                            roles_logic_sv2::parsers::PoolMessages<'static>,
-                        >,
-                    >,
-                ) = network_helpers_sv2::plain_connection_tokio::PlainConnection::new(stream).await;
-
-                // todo: do something with receiver and sender
-            }
-
-            Ok(())
-        });
-
-        Ok(handle)
+    fn call(&mut self, mut req: R) -> Self::Future {
+        debug!("this is Sv1MiningChannelService::call");
+        let fut = async move { Ok(()) };
+        Box::pin(fut)
     }
+}
+
+// some boilerplate for tower_test
+// inspired by https://github.com/tower-rs/tower/blob/master/tower-test/tests/mock.rs
+
+#[cfg(test)]
+use tokio_test::{assert_pending, assert_ready};
+use tower_test::{assert_request_eq, mock};
+#[tokio::test(flavor = "current_thread")]
+async fn single_request_ready() {
+    let (mut service, mut handle) = mock::spawn();
+
+    assert_pending!(handle.poll_request());
+
+    assert_ready!(service.poll_ready()).unwrap();
+
+    let response = service.call("hello");
+
+    assert_request_eq!(handle, "hello").send_response("world");
+
+    assert_eq!(response.await.unwrap(), "world");
+}
+
+#[tokio::test(flavor = "current_thread")]
+#[should_panic]
+async fn backpressure() {
+    let (mut service, mut handle) = mock::spawn::<_, ()>();
+
+    handle.allow(0);
+
+    assert_pending!(service.poll_ready());
+
+    service.call("hello").await.unwrap();
 }
