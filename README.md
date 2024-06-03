@@ -85,3 +85,17 @@ And write the `node_id` fields into `config.toml`
 # SV2 development
 
 `stratum-message-generator.sh` is used to automate [SRI Message Generator](https://github.com/stratum-mining/stratum/tree/main/utils/message-generator) tests.
+
+# Full Disclosure
+
+This project was started by [@plebhash](https://github.com/plebhash), which is an active member on the [Stratum Reference Implementation](https://stratumprotocol.org) community.
+
+All code is provided as FOSS (under [Apache 2.0](LICENSE-APACHE) + [MIT](LICENSE-MIT)), and @plebhash has no intention to:
+- Create a business out of it
+- Create a revenue stream from it
+
+Given the low hashrate this pool will attract (if any), this implementation will never be meaningful economic competition on the Bitcoin mining landscape.
+
+While a harsh critic could potentially label this as a LARP and a waste of time, @plebhash feels this is an important personal exercise with the goals of:
+- walking the shoes of a community developer trying to consume SRI APIs
+- creating community engagement with the pleb mining community, where a lot of FOSS ASIC is flourishing (e.g.: [BitAxe](https://bitaxe.org))

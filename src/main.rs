@@ -30,9 +30,7 @@ async fn main() -> anyhow::Result<()> {
 
     // let the services do their jobs asynchronously,
     // while keeping the main thread alive
-    loop {
-        tokio::task::yield_now().await;
-    }
+
 
     #[allow(unreachable_code)]
     Ok(())
